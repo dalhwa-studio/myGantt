@@ -95,8 +95,13 @@ export interface Scale {
 
 export function useScale(): Scale {
   const zoom = useStore((s) => s.settings.zoom);
+  const exportRange = useStore((s) => s.exportRange);
   const { eff } = useTree();
   return useMemo(() => {
+    if (exportRange) {
+      const dw = ZOOM_DW[zoom];
+      return { start: exportRange.start, end: exportRange.end, dw, width: (exportRange.end - exportRange.start + 1) * dw, zoom };
+    }
     const today = todayDay();
     let min = today - 30;
     let max = today + 120;
@@ -114,7 +119,7 @@ export function useScale(): Scale {
       max = addMonths(startOfMonth(max), 1) - 1;
     }
     return { start: min, end: max, dw, width: (max - min + 1) * dw, zoom };
-  }, [zoom, eff]);
+  }, [zoom, eff, exportRange]);
 }
 
 export type UnitKind = 'day' | 'week' | 'month' | 'quarter' | 'year';

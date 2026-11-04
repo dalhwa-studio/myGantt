@@ -434,6 +434,13 @@ svg.deps { position: absolute; left: 0; top: 0; z-index: 6; pointer-events: none
 .shortcuts { margin: 0; padding-left: 18px; line-height: 1.9; }
 kbd { background: #f1f2f6; border: 1px solid #dcdfe7; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 11px; font-family: inherit; }
 
+/* ---------- export ---------- */
+.export-form { display: grid; grid-template-columns: 64px 1fr; gap: 12px 12px; align-items: center; padding: 14px 0 6px; }
+.export-form > label { color: var(--muted); font-size: 12px; }
+.export-form .seg { justify-self: start; }
+.export-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; }
+.btn:disabled { opacity: .6; cursor: default; }
+
 /* ---------- toast ---------- */
 .toaster { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .toast { background: #1f2433; color: #fff; padding: 9px 16px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, .2); animation: pop .2s ease; }

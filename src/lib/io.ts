@@ -1,4 +1,3 @@
-import { toPng } from 'html-to-image';
 import { useStore } from '../store';
 import type { Data, DepType, ID, Status, Task } from '../types';
 import { buildTree, computeEffective, rootKey } from './schedule';
@@ -172,21 +171,6 @@ export function importCSV(text: string) {
   }
   s.importData({ projects: newProjects, tasks, deps, members: members.filter((m) => !s.members.some((x) => x.id === m.id)) }, 'merge');
   return tasks.length;
-}
-
-export async function exportPNG(node: HTMLElement | null) {
-  if (!node) throw new Error('간트 화면에서만 이미지로 내보낼 수 있습니다');
-  const url = await toPng(node, {
-    backgroundColor: '#ffffff',
-    width: node.scrollWidth,
-    height: node.scrollHeight,
-    pixelRatio: 1.5,
-    style: { overflow: 'visible' },
-  });
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `mygantt-${stamp()}.png`;
-  a.click();
 }
 
 export function printPDF() {

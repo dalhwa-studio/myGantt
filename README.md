@@ -1,6 +1,6 @@
 # myGantt
 
-간트 차트 기반 프로젝트 관리 웹앱입니다. https://gannt.dalhwa.com
+간트 차트 기반 프로젝트 관리 웹앱입니다. https://gantt.dalhwa.com
 
 ## 기능
 
@@ -16,7 +16,7 @@
 - 작업 상세: 담당자(여러 명), 상태, 우선순위, 예상 시간, 색상, 설명, 체크리스트, 댓글, 링크
 - 검색·필터 (담당자, 상태, 완료 숨기기, 내 작업)
 - 실행 취소 / 다시 실행, 키보드 단축키 (Enter, Tab, Shift+Tab, Delete, ⌘D, ↑↓)
-- 내보내기: PNG, PDF(인쇄), CSV(엑셀), JSON. 가져오기: CSV, JSON
+- 내보내기: PDF(여러 페이지·용지 선택), JPG, PNG, 인쇄, CSV(엑셀), JSON. 가져오기: CSV, JSON
 - 근무일, 휴일 설정, 근무일 기준 기간 계산
 
 데이터는 브라우저 localStorage에 저장됩니다 (서버 없음).
@@ -30,4 +30,4 @@ npm test
 npm run build
 ```
 
-`main`에 푸시하면 GitHub Actions가 GitHub Pages로 배포합니다 (`public/CNAME` = gannt.dalhwa.com).
+`main`에 푸시하면 GitHub Actions가 GitHub Pages로 배포합니다 (`public/CNAME` = gantt.dalhwa.com).

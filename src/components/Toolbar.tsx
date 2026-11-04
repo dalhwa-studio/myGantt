@@ -3,7 +3,9 @@ import { useStore } from '../store';
 import type { Columns, Status, View, Zoom } from '../types';
 import { ZOOM_LABEL, filtersActive } from '../lib/derived';
 import { STATUSES, STATUS_LABEL, pickFile } from '../lib/util';
-import { exportCSV, exportJSON, exportPNG, importCSV, importJSON, printPDF } from '../lib/io';
+import { exportCSV, exportJSON, importCSV, importJSON, printPDF } from '../lib/io';
+import type { ExportFormat } from '../lib/exportImage';
+import { ExportModal } from './ExportModal';
 import { Dropdown, Menu, toast } from './common';
 
 const VIEWS: { v: View; label: string; icon: string }[] = [
@@ -31,6 +33,7 @@ export function Toolbar({ exportNode }: { exportNode: () => HTMLElement | null }
   const st = useStore.getState;
   const set = st().setSettings;
   const [blName, setBlName] = useState('');
+  const [exportFormat, setExportFormat] = useState<ExportFormat | null>(null);
 
   const addTask = () => {
     const s = st();
@@ -207,15 +210,11 @@ export function Toolbar({ exportNode }: { exportNode: () => HTMLElement | null }
           <Menu
             onClose={close}
             items={[
-              {
-                label: 'PNG 이미지',
-                onClick: () => {
-                  if (settings.view !== 'gantt') return toast('간트 보기에서 사용할 수 있습니다');
-                  toast('이미지를 생성 중입니다...');
-                  exportPNG(exportNode()).catch((e) => toast(String(e.message ?? e)));
-                },
-              },
-              { label: 'PDF / 인쇄', onClick: () => setTimeout(printPDF, 50) },
+              { label: 'PDF 문서', onClick: () => setExportFormat('pdf') },
+              { label: 'JPG 이미지', onClick: () => setExportFormat('jpg') },
+              { label: 'PNG 이미지', onClick: () => setExportFormat('png') },
+              { label: '인쇄', onClick: () => setTimeout(printPDF, 50) },
+              { divider: true },
               { label: 'CSV (엑셀)', onClick: exportCSV },
               { label: 'JSON 백업', onClick: exportJSON },
               { divider: true },
@@ -251,6 +250,7 @@ export function Toolbar({ exportNode }: { exportNode: () => HTMLElement | null }
           />
         )}
       </Dropdown>
+      {exportFormat && <ExportModal format={exportFormat} getNode={exportNode} onClose={() => setExportFormat(null)} />}
     </header>
   );
 }

@@ -576,8 +576,8 @@ export function GanttView({ exportRef }: { exportRef: React.RefObject<HTMLDivEle
               </defs>
               {depPaths.map(({ d, path, crit }) => (
                 <g key={d.id} className={`dep${crit ? ' critical' : ''}${depMenu?.id === d.id ? ' active' : ''}`}>
-                  <path d={path} className="dep-hit" onClick={(e) => setDepMenu({ id: d.id, x: e.clientX, y: e.clientY })} />
-                  <path d={path} className="dep-line" markerEnd={crit ? 'url(#arrow-crit)' : 'url(#arrow)'} />
+                  <path d={path} className="dep-hit" fill="none" stroke="transparent" strokeWidth={10} onClick={(e) => setDepMenu({ id: d.id, x: e.clientX, y: e.clientY })} />
+                  <path d={path} className="dep-line" fill="none" stroke={crit ? '#ef4444' : '#64748b'} strokeWidth={crit ? 1.8 : 1.4} markerEnd={crit ? 'url(#arrow-crit)' : 'url(#arrow)'} />
                 </g>
               ))}
               {drag?.mode === 'link' && <line x1={drag.x0} y1={drag.y0} x2={drag.x} y2={drag.y} className="link-preview" />}
@@ -711,6 +711,7 @@ function GridRow({
 }) {
   const s = useStore.getState;
   const editingId = useStore((x) => x.editingId);
+  const exporting = useStore((x) => x.exporting);
   const dropCls = dropPos ? ` drop-${dropPos}` : '';
 
   if (row.kind === 'project') {
@@ -740,6 +741,20 @@ function GridRow({
   const dur = startDay != null && endDay != null ? workingDaysBetween(cal, startDay, endDay) : null;
 
   const cell = (key: string, w: number): ReactNode => {
+    if (exporting && key !== 'assignee') {
+      const fmt = (d: Day | null) => (d != null ? fromDay(d).slice(2).replace(/-/g, '.') : '');
+      const text =
+        key === 'start' ? fmt(startDay)
+        : key === 'end' ? (t.type === 'milestone' ? '' : fmt(endDay))
+        : key === 'duration' ? (dur != null && t.type !== 'milestone' ? `${dur}일` : '')
+        : key === 'progress' ? `${isParent ? ef?.progress ?? 0 : t.progress}%`
+        : STATUS_LABEL[t.status];
+      return (
+        <div key={key} className={`gcell${isParent ? ' muted' : ''}`} style={{ width: w, color: key === 'status' ? STATUS_COLOR[t.status] : undefined }}>
+          {text}
+        </div>
+      );
+    }
     switch (key) {
       case 'assignee':
         return (

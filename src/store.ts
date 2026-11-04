@@ -46,6 +46,10 @@ interface State extends Data {
   selectedId: ID | null;
   detailId: ID | null;
   editingId: ID | null;
+  /** temporary timeline range used while exporting an image/PDF */
+  exportRange: { start: number; end: number } | null;
+  /** true while rendering an export (inputs are drawn as plain text) */
+  exporting: boolean;
   past: Data[];
   future: Data[];
 
@@ -145,6 +149,8 @@ export const useStore = create<State>()(
         selectedId: null,
         detailId: null,
         editingId: null,
+        exportRange: null,
+        exporting: false,
         past: [],
         future: [],
 
